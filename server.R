@@ -103,7 +103,7 @@ shinyServer(function(input, output) {
       future_promise({
         ## init connections and start reading
         con <- init_con(port)
-        Sys.sleep(2)
+        Sys.sleep(1)
         
         ## flash file
         write.table(data.frame(NA), file = data_file, row.names = FALSE, append = FALSE)
@@ -177,7 +177,7 @@ shinyServer(function(input, output) {
     if (nrow(df) > 1 && any(is.na(df[-1, 1]))) 
       output$overexposure <- renderText("PMT OVEREXPOSURE!")
     else
-      output$overexposure <- renderText("")
+      output$overexposure <- renderText(NULL)
     
     ## render plot
     output$plot <- renderPlot({

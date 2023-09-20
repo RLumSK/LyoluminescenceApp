@@ -74,7 +74,7 @@ send_cmd <- function(con, cmd) {
   ## check allowed commands
   if (!cmd_char %in% c("P", "R", "D", "S", "C")) {
     stop("[send_cmd()] Unsupported command! Supported are: 
-         \nP\t->\t set the integration interval in 10 ms increments (1 to 100)
+         P\t->\t set the integration interval in 10 ms increments (1 to 100)
          R\t->\t set sequence of readings (1 to 255)
          D\t->\t reset HV to default
          S\t->\t start reading sequence
@@ -93,28 +93,25 @@ send_cmd <- function(con, cmd) {
   cmd <- cmd_char
   
   ## write commands ------------------
-  ## write command, but we have to pay attention, if the command is OTHER
-  ## than C, we first have to make sure that we stop reading 
-  
-  ## make sure were are in a safe mode
-  
-  ## flush connection
-  con$translation <- "binary"
-  serial::read.serialConnection(con)
-  flush(con)
-  
-  ## set connection to ASCII mode
-  con$translation <- "cr"
+    ## flush connection
+    con$translation <- "binary"
+    serial::read.serialConnection(con)
+    
+    ## set connection to ASCII mode
+    con$translation <- "cr"
   
   ## write command
   serial::write.serialConnection(con, cmd)
-  Sys.sleep(0.5)
   
   ## set connection to binary mode
   con$translation <- "binary"
   
+  ## read response ... we let the system wait until we have something
+  while(serial::nBytesInQueue(con)[1] < 2) 
+    Sys.sleep(0.01)
+  
   ## read response
-  resp <- serial::read.serialConnection(con) |> 
+  resp <- serial::read.serialConnection(con, n = 2) |> 
     readBin(what = "character", size = 2, n = 1) 
   
   ## make sure that linebreaks are shown cmd
