@@ -103,7 +103,7 @@ shinyServer(function(input, output) {
       future_promise({
         ## init connections and start reading
         con <- init_con(port)
-        Sys.sleep(1)
+        Sys.sleep(2)
         
         ## flash file
         write.table(data.frame(NA), file = data_file, row.names = FALSE, append = FALSE)
