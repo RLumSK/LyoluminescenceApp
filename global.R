@@ -191,6 +191,10 @@ plot_empty <- function(...) {
     ylim = c(0, 1),
     ...
   )
+  text(
+    x = (par()$usr[2] - par()$usr[1])/2, 
+    y = (par()$usr[4] - par()$usr[3])/2,
+    "NO DATA")
   
 }
 

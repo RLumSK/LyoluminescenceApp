@@ -57,6 +57,27 @@ shinyUI(
            )
          ),
          fluidRow(
+           column(width = 6, align = "center",
+            radioButtons(
+            "x_log",
+            label = "x-axis",
+            choiceNames = c("log", "lin"),
+            choiceValues = c("x", ""),
+            selected = "", 
+            inline = TRUE)
+           ),
+           column(
+             width = 6, align = "center",
+             radioButtons(
+             "y_log",
+             label = "y-axis",
+             selected = "", 
+             choiceNames = c("log", "lin"),
+             choiceValues = c("y", ""),
+             inline = TRUE))
+         ),
+         fluidRow(
+           hr(),
            column(
              width = 12,
              align = "center", 
@@ -88,8 +109,6 @@ shinyUI(
              fluidRow(
              div(downloadButton("download_data", "Download CSV"), align = "right"),
                plotOutput("plot")),
-            # fluidRow(
-            #   ), 
             icon = icon("cog", lib = "glyphicon")))
         ), #end sidePanel
     # PANEL - News -------------------------------------------------------------

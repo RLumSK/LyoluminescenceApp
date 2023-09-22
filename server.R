@@ -45,7 +45,7 @@ shinyServer(function(input, output) {
          stopApp()
        })
     
-  ## update input selection
+  ## update input selection for port list
   observeEvent(input$port_refresh, {
     x <- serial::listPorts() 
     
@@ -196,10 +196,11 @@ shinyServer(function(input, output) {
           y = df[[1]][-1], 
           type = "l", 
           xlab = "Time [s]",
+          log = paste0(input$x_log,input$y_log),
           ylab = paste0("Counts [1/", input$PMT_P/100, " s]"))
 
       } else {
-        plot_empty()
+        suppressWarnings(plot_empty(log = paste0(input$x_log,input$y_log)))
         
       }
     })
