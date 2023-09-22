@@ -107,7 +107,13 @@ shinyUI(
         ),#end sidebarPanel
         mainPanel(
              fluidRow(
-             div(downloadButton("download_data", "Download CSV"), align = "right"),
+              div(
+                column(width = 9, align = "right",
+                 checkboxInput("rm_NA", "Remove NA", value = FALSE)),
+                column(width = 3, align = "left",
+                 downloadButton("download_data", "Download CSV"), HTML('&nbsp;')),
+                align = "right")),
+             fluidRow(
                plotOutput("plot")),
             icon = icon("cog", lib = "glyphicon")))
         ), #end sidePanel

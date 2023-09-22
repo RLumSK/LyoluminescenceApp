@@ -229,6 +229,11 @@ shinyServer(function(input, output) {
       tmp <- data.frame(
         time = seq(input$PMT_P, length(tmp) * input$PMT_P, input$PMT_P)/100, 
         counts = tmp)
+      
+      ## replace NA with no values
+      if (input$rm_NA)
+        tmp[is.na(tmp[[2]]),2] <- "" 
+      
       write.table(
         x = tmp, 
         file = tmp_file, 
