@@ -45,6 +45,15 @@ shinyServer(function(input, output) {
          stopApp()
        })
     
+  ## update input selection
+  observeEvent(input$port_refresh, {
+    x <- serial::listPorts() 
+    
+     updateSelectInput(
+       inputId = "port", 
+       choices = x)
+  })  
+       
   ## initialise the connection
   observeEvent(input$init_start,{
     con <<- try({init_con(input$port)})

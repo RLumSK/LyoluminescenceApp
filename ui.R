@@ -10,14 +10,21 @@ shinyUI(
     tabPanel("Measurement",
       sidebarLayout(
         sidebarPanel(
-          fluidRow(
-            column(
-              width = 12, 
-              selectInput(
-                inputId = "port", 
-                label = HTML("Select Port"), 
-                choices = serial::listPorts())
-            )),
+          div(style="vertical-align:bottom;",
+            fluidRow(
+              column(width = 10,
+                selectInput(
+                    inputId = "port", 
+                    label = HTML("Select Port"), 
+                    choices = serial::listPorts())), 
+                column(width = 2,
+                  actionButton(
+                    "port_refresh", 
+                    label =  "", 
+                    icon = icon("refresh"), 
+                    style = 'margin-top:25px'
+                    ))
+              )),
           fluidRow(
             column(
               align = "center",
