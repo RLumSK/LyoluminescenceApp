@@ -59,7 +59,6 @@ init_con <- function(port) {
   return(con)
 }
 
-
 #' Define function for general command sending and return value reading
 #' 
 #' @export
@@ -154,7 +153,7 @@ read_count_data <- function(con, freq = 10) {
       
       ## write into vector
       ## with the condition we make sure that nothing odd happens
-      if(length(bytes) >= 4) {
+      if (length(bytes) >= 4) {
         ## read information
         tmp <- readBin(
           con = bytes,
@@ -179,6 +178,20 @@ read_count_data <- function(con, freq = 10) {
   
   ## remove NA
   return(unlist(m))
+}
+
+#' Empty plot
+#' 
+#' @export
+plot_empty <- function(...) {
+  plot(
+    x = NA,
+    y = NA,
+    xlim = c(0, 100),
+    ylim = c(0, 1),
+    ...
+  )
+  
 }
 
 

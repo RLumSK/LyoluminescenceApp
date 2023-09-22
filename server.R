@@ -181,15 +181,18 @@ shinyServer(function(input, output) {
     
     ## render plot
     output$plot <- renderPlot({
-      if (nrow(df) > 1)
+      if (nrow(df) > 1) {
         plot(
           x = seq(input$PMT_P, (nrow(df) - 1) * input$PMT_P, input$PMT_P)/100, 
           y = df[[1]][-1], 
           type = "l", 
           xlab = "Time [s]",
           ylab = paste0("Counts [1/", input$PMT_P/100, " s]"))
- 
 
+      } else {
+        plot_empty()
+        
+      }
     })
   })
 
@@ -226,6 +229,5 @@ shinyServer(function(input, output) {
       file.copy(tmp_file, file, overwrite = TRUE)
     }
   )
-  
   
 }) # end shinyServer
