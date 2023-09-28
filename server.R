@@ -98,6 +98,15 @@ shinyServer(function(input, output) {
       ## set P
       PMT_P <- input$PMT_P
       
+      ## set preset duration
+      if(is.null(input$PMT_nCH) || is.na(input$PMT_nCH) || input$PMT_nCH == 0)
+        PMT_nCH <- Inf
+      else
+        PMT_nCH <- input$PMT_nCH
+      
+      ## set counter
+      cnt <- 1
+      
       ## set readout frequency
       if (PMT_P <= 10) {
         freq <- 10
@@ -126,7 +135,7 @@ shinyServer(function(input, output) {
         send_cmd(con = con, cmd = paste0("P", PMT_P))
         send_cmd(con = con, cmd = "C")
         
-        while (TRUE) {
+        while (cnt < PMT_cCH) {
           if (interrupted()) {
             send_cmd(con = con, cmd = "C")
             Sys.sleep(1)
@@ -142,6 +151,9 @@ shinyServer(function(input, output) {
             col.names = FALSE,
             row.names = FALSE,
             sep = ",")
+          
+          ## update counter
+          cnt <- cnt + 1
         }
       }) %>%
         then(
@@ -170,6 +182,16 @@ shinyServer(function(input, output) {
   ## show real count interval
   output$meas_interval <- renderText({
     paste0("[counts/", input$PMT_P/100, " s]")
+  })
+  
+  ## show measurement duration
+  output$meas_duration <- renderText({
+    
+    if(is.null(input$PMT_nCH) || is.na(input$PMT_nCH) || input$PMT_nCH == 0)
+      "meas. duration: unlimited"
+    else
+      paste0("meas. duration: ", input$PMT_nCH * input$PMT_P/100, " s")
+    
   })
   
   ## render status

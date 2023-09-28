@@ -11,6 +11,7 @@ shinyUI(
       sidebarLayout(
         sidebarPanel(
           div(style="vertical-align:bottom;",
+            h5("Connection settings"),
             fluidRow(
               column(width = 10,
                 selectInput(
@@ -38,10 +39,11 @@ shinyUI(
                 label = HTML("Disconnect"))
             )),
           hr(),
+         h5("Measurement parameters"),
          fluidRow(
+           br(),
            column(
-             width = 12
-             ,
+             width = 6 ,
              align = "center",
              numericInput(
                inputId =  "PMT_P",
@@ -50,13 +52,29 @@ shinyUI(
                min = 10,
                max = 99,
                step = 1,
-               width = "200px"
+               width = "180px"
              ), 
              textOutput("meas_interval"),
              br()
-           )
-         ),
+           ),
+           column(
+             width = 6 ,
+             align = "center",
+             numericInput(
+               inputId =  "PMT_nCH",
+               label = paste0("Number of channels"),
+               value = 0,
+               min = 0,
+               max = 9999,
+               step = 1,
+               width = "180px"
+             ),
+             textOutput("meas_duration"),
+           ),
+         style = 'border: 1px dashed grey;'),
+         h5("Plot settings"),
          fluidRow(
+           br(),
            column(width = 6, align = "center",
             radioButtons(
             "x_log",
@@ -74,10 +92,11 @@ shinyUI(
              selected = "", 
              choiceNames = c("log", "lin"),
              choiceValues = c("y", ""),
-             inline = TRUE))
-         ),
+             inline = TRUE)),
+         style = 'border: 1px dashed grey;'),
          fluidRow(
-           hr(),
+           br(),
+           br(),
            column(
              width = 12,
              align = "center", 
