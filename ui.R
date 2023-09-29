@@ -133,7 +133,7 @@ shinyUI(
                  downloadButton("download_data", "Download CSV"), HTML('&nbsp;')),
                 align = "right")),
              fluidRow(
-               plotOutput("plot")),
+               plotOutput("plot", height = "600px")),
             icon = icon("cog", lib = "glyphicon")))
         ), #end sidePanel
     # PANEL - News -------------------------------------------------------------
