@@ -135,7 +135,7 @@ shinyServer(function(input, output) {
         send_cmd(con = con, cmd = paste0("P", PMT_P))
         send_cmd(con = con, cmd = "C")
         
-        while (cnt < PMT_cCH) {
+        while (cnt < PMT_nCH) {
           if (interrupted()) {
             send_cmd(con = con, cmd = "C")
             Sys.sleep(1)
