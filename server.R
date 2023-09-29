@@ -212,7 +212,9 @@ shinyServer(function(input, output) {
     
     ## render plot
     output$plot <- renderPlot({
+      par(cex = 1.2)
       if (nrow(df) > 1) {
+        print(input$plot_brush)
         plot(
           x = seq(input$PMT_P, (nrow(df) - 1) * input$PMT_P, input$PMT_P)/100, 
           y = df[[1]][-1], 
