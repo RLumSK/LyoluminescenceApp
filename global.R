@@ -200,4 +200,11 @@ plot_empty <- function(...) {
   
 }
 
+#'@title List available ports
+#'
+#'@export
+list_ports <- function() {
+  suppressMessages(serial::listPorts())
+  
+}
 

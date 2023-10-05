@@ -47,7 +47,7 @@ shinyServer(function(input, output) {
     
   ## update input selection for port list
   observeEvent(input$port_refresh, {
-    x <- serial::listPorts() 
+    x <- list_ports()
     
      updateSelectInput(
        inputId = "port", 
@@ -147,6 +147,8 @@ shinyServer(function(input, output) {
         then(
           onFulfilled = function(value) {
           message("[SUCCESS] Reading stopped manually!")
+            
+          con_status$mode <- "idle"
  
           if (serial::isOpen(con)) {
             flush(con)
@@ -157,6 +159,7 @@ shinyServer(function(input, output) {
         },
         onRejected = function(err) {
           warning("An error occurred: ", err)
+          con_status$mode <- "idle"
           con$translation <- "binary"
           serial::read.serialConnection(con)
           flush(con)
@@ -169,7 +172,6 @@ shinyServer(function(input, output) {
   ## stop reading input -------
   observeEvent(input$stop,{
       fire_interrupt()
-      con_status$mode <- "idle"
       
   })
   

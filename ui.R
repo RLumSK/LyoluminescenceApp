@@ -10,14 +10,21 @@ shinyUI(
     tabPanel("Measurement",
       sidebarLayout(
         sidebarPanel(
-          div(style="vertical-align:bottom;",
+          div(style = "vertical-align:bottom;",
             h5("Connection settings"),
             fluidRow(
               column(width = 10,
                 selectInput(
                     inputId = "port", 
                     label = HTML("Select Port"), 
-                    choices = serial::listPorts())), 
+                    choices = list_ports(), 
+                    selected = 
+                      if (any(grepl("USB", list_ports())))
+                         list_ports()[grepl("USB", list_ports())]
+                       else
+                      NULL
+                    )
+                ), 
                 column(width = 2,
                   actionButton(
                     "port_refresh", 
