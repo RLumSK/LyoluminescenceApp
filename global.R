@@ -133,7 +133,7 @@ send_cmd <- function(con, cmd) {
 #'
 #'
 #'@export
-read_count_data <- function(con, freq = 10) {
+read_count_data <- function(con, freq = 1) {
   serial::nBytesInQueue(con)
   con$translation <- "binary"
   
@@ -169,10 +169,12 @@ read_count_data <- function(con, freq = 10) {
         
         ## write to matrix
         m[cnt:(cnt - 1 + n_points)] <- tmp
+        
+        ## update counter
+        cnt <- cnt + n_points
       }
       
-      ## update counter
-      cnt <- cnt + n_points
+
     }
   }
   

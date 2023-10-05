@@ -107,17 +107,6 @@ shinyServer(function(input, output) {
       ## set counter
       cnt <- 1
       
-      ## set readout frequency
-      if (PMT_P <= 10) {
-        freq <- 10
-      } else if (PMT_P > 10 & PMT_P <= 50) {
-        freq <- 5
-        
-      } else {
-        freq <- 1
-        
-      }
-      
       future_promise({
         ## init connections and start reading
         con <- init_con(port)
@@ -135,14 +124,13 @@ shinyServer(function(input, output) {
         send_cmd(con = con, cmd = paste0("P", PMT_P))
         send_cmd(con = con, cmd = "C")
         
-        while (cnt < PMT_nCH) {
+        while (cnt <= PMT_nCH) {
           if (interrupted()) {
             send_cmd(con = con, cmd = "C")
             Sys.sleep(1)
-            close(con)
             break()
           }
-          m <- read_count_data(con = con, freq = freq)
+          m <- read_count_data(con = con)
           write.table(
             x = m,
             file = data_file,
@@ -159,6 +147,12 @@ shinyServer(function(input, output) {
         then(
           onFulfilled = function(value) {
           message("[SUCCESS] Reading stopped manually!")
+ 
+          if (serial::isOpen(con)) {
+            flush(con)
+            close(con)
+         
+          }
           value
         },
         onRejected = function(err) {
@@ -186,9 +180,8 @@ shinyServer(function(input, output) {
   
   ## show measurement duration
   output$meas_duration <- renderText({
-    
     if(is.null(input$PMT_nCH) || is.na(input$PMT_nCH) || input$PMT_nCH == 0)
-      "meas. duration: unlimited"
+      "meas. duration: no ristriction"
     else
       paste0("meas. duration: ", input$PMT_nCH * input$PMT_P/100, " s")
     
@@ -214,14 +207,13 @@ shinyServer(function(input, output) {
     output$plot <- renderPlot({
       par(cex = 1.2)
       if (nrow(df) > 1) {
-        print(input$plot_brush)
-        plot(
+        suppressWarnings(plot(
           x = seq(input$PMT_P, (nrow(df) - 1) * input$PMT_P, input$PMT_P)/100, 
           y = df[[1]][-1], 
           type = "l", 
           xlab = "Time [s]",
           log = paste0(input$x_log,input$y_log),
-          ylab = paste0("Counts [1/", input$PMT_P/100, " s]"))
+          ylab = paste0("Counts [1/", input$PMT_P/100, " s]")))
 
       } else {
         suppressWarnings(plot_empty(log = paste0(input$x_log,input$y_log)))
