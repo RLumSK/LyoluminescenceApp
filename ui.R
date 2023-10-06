@@ -10,126 +10,136 @@ shinyUI(
     tabPanel("Measurement",
       sidebarLayout(
         sidebarPanel(
-          div(style = "vertical-align:bottom;",
-            h5("Connection settings"),
-            fluidRow(
-              column(width = 10,
-                selectInput(
-                    inputId = "port", 
-                    label = HTML("Select Port"), 
-                    choices = list_ports(), 
-                    selected = 
-                      if (any(grepl("USB", list_ports())))
+          tabsetPanel(
+            tabPanel("Measurement settings", 
+               div(style = "vertical-align:bottom;",
+               br(),
+               h5("Connection settings"),
+               fluidRow(
+                 column(width = 10,
+                   selectInput(
+                     inputId = "port", 
+                     label = HTML("Select Port"), 
+                     choices = list_ports(), 
+                     selected = 
+                       if (any(grepl("USB", list_ports())))
                          list_ports()[grepl("USB", list_ports())]
                        else
-                      NULL
-                    )
-                ), 
-                column(width = 2,
+                         NULL
+                      )
+                   ), 
+                  column(width = 2,
+                    actionButton(
+                     "port_refresh", 
+                     label =  "", 
+                     icon = icon("refresh"), 
+                     style = 'margin-top:25px')
+                   )
+                 )),
+               fluidRow(
+                 column(
+                  align = "center",
+                  width = 12, 
+                  br(),
                   actionButton(
-                    "port_refresh", 
-                    label =  "", 
-                    icon = icon("refresh"), 
-                    style = 'margin-top:25px'
-                    ))
-              )),
-          fluidRow(
-            column(
-              align = "center",
-              width = 12, 
+                   inputId = "init_start", 
+                   label = HTML("Initialse")),
+                  actionButton(
+                   inputId = "init_stop", 
+                   label = HTML("Disconnect"))
+                )),
+                hr(),
+                h5("Measurement parameters"),
+              fluidRow(
+                br(),
+                column(
+                  width = 6 ,
+                  align = "center",
+                 numericInput(
+                   inputId =  "PMT_P",
+                   label = paste0("Channel time [x 10 ms]"),
+                   value = 10,
+                   min = 10,
+                   max = 99,
+                   step = 1,
+                   width = "180px"), 
+                textOutput("meas_interval"),
+                br()),
+              column(
+               width = 6 ,
+               align = "center",
+               numericInput(
+                inputId =  "PMT_nCH",
+                label = paste0("Number of channels"),
+                value = 0,
+                min = 0,
+                max = 9999,
+                step = 1,
+                width = "180px"),
+              textOutput("meas_duration")),
+               style = 'border: 1px dashed grey;'),
+             fluidRow(
               br(),
-              actionButton(
-                inputId = "init_start", 
-                label = HTML("Initialse")),
-              actionButton(
-                inputId = "init_stop", 
-                label = HTML("Disconnect"))
-            )),
-          hr(),
-         h5("Measurement parameters"),
-         fluidRow(
-           br(),
-           column(
-             width = 6 ,
-             align = "center",
-             numericInput(
-               inputId =  "PMT_P",
-               label = paste0("Channel time [x 10 ms]"),
-               value = 10,
-               min = 10,
-               max = 99,
-               step = 1,
-               width = "180px"
-             ), 
-             textOutput("meas_interval"),
-             br()
-           ),
-           column(
-             width = 6 ,
-             align = "center",
-             numericInput(
-               inputId =  "PMT_nCH",
-               label = paste0("Number of channels"),
-               value = 0,
-               min = 0,
-               max = 9999,
-               step = 1,
-               width = "180px"
-             ),
-             textOutput("meas_duration"),
-           ),
-         style = 'border: 1px dashed grey;'),
-         h5("Plot settings"),
-         fluidRow(
-           br(),
-           column(width = 6, align = "center",
-            radioButtons(
-            "x_log",
-            label = "x-axis",
-            choiceNames = c("log", "lin"),
-            choiceValues = c("x", ""),
-            selected = "", 
-            inline = TRUE)
-           ),
-           column(
-             width = 6, align = "center",
-             radioButtons(
-             "y_log",
-             label = "y-axis",
-             selected = "", 
-             choiceNames = c("log", "lin"),
-             choiceValues = c("y", ""),
-             inline = TRUE)),
-         style = 'border: 1px dashed grey;'),
-         fluidRow(
+              br(),
+              column(
+               width = 12,
+               align = "center", 
+               actionButton(
+                inputId = "start", 
+                class = "btn-success",
+                label = HTML("Start reading")),
+               actionButton(
+                inputId = "stop", 
+                class = "btn-warning",
+                label = HTML("Stop reading")))
+              ),
+              hr(),
+            fluidRow(
+              column(
+                width = 12,
+                verbatimTextOutput("con_status")
+              )
+            ),
+         fluid = TRUE),
+          tabPanel("Plot settings", 
            br(),
            br(),
-           column(
-             width = 12,
-             align = "center", 
-             actionButton(
-               inputId = "start", 
-               class = "btn-success",
-               label = HTML("Start reading")),
-             actionButton(
-               inputId = "stop", 
-               class = "btn-warning",
-               label = HTML("Stop reading")))
-          ),
-         hr(),
-         fluidRow(
+           fluidRow(
+            column(width = 6, align = "center",
+              radioButtons(
+              "x_log",
+              label = "x-axis",
+              choiceNames = c("log", "lin"),
+              choiceValues = c("x", ""),
+              selected = "", 
+              inline = TRUE)
+            ),
           column(
-            width = 12,
-            verbatimTextOutput("con_status")
-          )
-         ),
+            width = 6, align = "center",
+             radioButtons(
+               "y_log",
+               label = "y-axis",
+               selected = "", 
+               choiceNames = c("log", "lin"),
+               choiceValues = c("y", ""),
+               inline = TRUE)),
+          style = 'border: 1px dashed grey;'),  
+         br(),
          fluidRow(
            column(
-             width = 12,
-             align = "center",
-            h4(textOutput("overexposure"), style = 'color:red')  
+             width = 5,
+             sliderInput(
+               inputId = "plot_settings_cex", 
+               label = "Scaling", 
+               min = 1, 
+               max = 3,
+               value = 1.2, 
+               step = 0.1)
+            )
+           
+         ),
+         fluid = TRUE)
          )
-        ),
         ),#end sidebarPanel
         mainPanel(
              fluidRow(
@@ -139,6 +149,13 @@ shinyUI(
                 column(width = 3, align = "left",
                  downloadButton("download_data", "Download CSV"), HTML('&nbsp;')),
                 align = "right")),
+             fluidRow(
+               column(
+                 width = 12,
+                 align = "center",
+                 h4(textOutput("overexposure"), style = 'color:red')  
+               )
+             ),    
              fluidRow(
                plotOutput(
                  "plot", 
