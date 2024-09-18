@@ -1,0 +1,29 @@
+Package: LyoluminescenceApp
+Type: Package
+Title: Lyoluminescence Measurement Shiny App
+Version: 0.1.0
+Author: Sebastian Kreutzer [aut, cre, ] (<https://orcid.org/0000-0002-0734-2199>)
+Authors@R: c(
+    person("Sebastian", "Kreutzer", role = c("aut","cre"), email = "sebastian.kreutzer@uni-heidelberg.de", comment = c(ORCID = "0000-0002-0734-2199")))
+Maintainer: Sebastian Kreutzer <sebastian.kreutzer@uni-heidelberg.de>
+Description: Shiny App to control an Hamamatsu PMT to measure lyoluminescence signals.
+License: GPL-3
+Encoding: UTF-8
+Language: en-GB
+Depends:
+    R (>= 4.1),
+    utils
+Imports: 
+    cli (>= 3.6.1),
+    future (>= 1.33.0),
+    knitr (>= 1.44),
+    markdown (>= 1.9),
+    methods,
+    plotly (>= 4.10.2),
+    shiny (>= 1.7.5),
+    serial (>= 3.0),
+    promises (>= 1.2.1)
+Suggests:
+    rmarkdown (>= 2.23)
+LazyData: true
+RoxygenNote: 7.2.3
