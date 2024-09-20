@@ -212,11 +212,8 @@ server_module_measurement <- function(id, user_settings) {
         con <- init_con(port)
         Sys.sleep(0.5)
 
-        ## check status of reading, to make sure the PMT is not in
-        ## continuous reading mode
-        ## if we do not get VA we have to stop the mode first
-        if (send_cmd(con = con, cmd = "C")$resp != "VA")
-          send_cmd(con = con, cmd = "C")
+        ## make sure the PMT is not in continuous reading mode
+        send_cmd(con = con, cmd = "\n")
 
         send_cmd(con = con, cmd = "D")
         send_cmd(con = con, cmd = paste0("P", PMT_P))
