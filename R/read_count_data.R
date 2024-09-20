@@ -33,19 +33,42 @@ read_count_data <- function(con, freq = 1) {
   ## set results
   res <- numeric()
 
+  con$translation <- "binary"
+
   # read stuff
   while (serial::nBytesInQueue(con)[1] <= 65536 && length(res) <= freq) {
-    ## limit the readout speed to the maximum gate time
-    Sys.sleep(0.01)
+    ## limit the readout speed to half the minimum gate time
+    Sys.sleep(0.005)
 
     ## read bits
-    com_str <- paste0('binary scan [read ${sdev_', con_str, '}] B* tcl_tmp_', con_str)
+    com_str <- paste0('binary scan [read ${sdev_', con_str, '}] I tcl_tmp_', con_str)
 
     tcltk::tclvalue(tcltk::.Tcl(com_str))
     raw_bits <- tcltk::tclvalue(paste0('tcl_tmp_', con_str))
 
     ## jump to next cycle if empty
     if (raw_bits == "") next()
+
+    ## we may receive a VAVA value at the start, perhaps something from
+    ## the send_cmd hasn't removed those responses from the stream
+    ## ##               V       A       V       A
+    ## if (raw_bits == "01010110010000010101011001000001") { # when using B32
+    if (raw_bits == "1447122497") { # when using I
+      cat("VAVA\n")
+      next()
+    }
+
+    ## debugging
+    if (as.integer(raw_bits) > 1000) {
+      cat("reading:", raw_bits, ", queue:", serial::nBytesInQueue(con)[1], "\n")
+    }
+
+    int_value <- as.integer(raw_bits)
+    res <- c(res, int_value)
+
+    ## this commented out block is unnecessary when reading data with the `I`
+    ## format flag
+    if (FALSE) {
 
     ## split the bits and create logical values
     raw_bits <- strsplit(raw_bits, split = "", fixed = TRUE)[[1]] |>
@@ -71,6 +94,7 @@ read_count_data <- function(con, freq = 1) {
 
     }
 
+    } # end if FALSE
   }
 
   ## return list
