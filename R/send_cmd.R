@@ -62,7 +62,7 @@ send_cmd <- function(con, cmd) {
   ## write commands ------------------
   ## flush connection
   con$translation <- "binary"
-  serial::read.serialConnection(con)
+  flush(con)
 
   ## set connection to ASCII mode
   con$translation <- "cr"
@@ -100,4 +100,15 @@ send_cmd <- function(con, cmd) {
   con$mode <- cmd
 
   return(list(con = con, resp = resp))
+}
+
+## copied from serial::flush.serialConnection, as that function is not
+## exported
+flush <- function(con) {
+  if (!serial::isOpen(con))
+    stop(simpleError(paste(con$port, "is not open!")))
+  tryCatch({
+    tcltk::.Tcl(paste("flush ${sdev_", con$var, "}", sep = ""))
+  }, error = function(e) stop(simpleError(e$message)))
+  invisible("DONE")
 }
