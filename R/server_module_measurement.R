@@ -210,7 +210,7 @@ server_module_measurement <- function(id, user_settings) {
       promises::future_promise({
         ## init connections and start reading
         con <- init_con(port)
-        Sys.sleep(0.5)
+        Sys.sleep(0.25)
 
         ## make sure the PMT is not in continuous reading mode
         send_cmd(con = con, cmd = "\n")
@@ -222,7 +222,7 @@ server_module_measurement <- function(id, user_settings) {
         while (cnt <= PMT_nCH) {
           if (interrupted()) {
             send_cmd(con = con, cmd = "C")
-            Sys.sleep(1)
+            Sys.sleep(0.25)
             break()
           }
 
