@@ -36,9 +36,17 @@ read_count_data <- function(con, freq = 1) {
   con$translation <- "binary"
 
   # read stuff
-  while (serial::nBytesInQueue(con)[1] <= 4096 && length(res) <= freq) {
-    ## limit the readout speed to the minimum gate time
-    Sys.sleep(0.01)
+  while (length(res) < freq) {
+
+    ## we wait until we have at least 8 bytes in the queue before reading
+    ## (in theory for us 4 should suffice, but 8 seems to be more reliable)
+    ## see https://majenko.co.uk/blog/reading-serial-arduino
+    queue.bytes <- 8
+    queue <- serial::nBytesInQueue(con)[1]
+    while (queue < queue.bytes) {
+      Sys.sleep(0.005)
+      queue <- serial::nBytesInQueue(con)[1]
+    }
 
     ## read bits
     com_str <- paste0('binary scan [read ${sdev_', con_str, '}] I tcl_tmp_', con_str)
