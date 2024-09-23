@@ -109,7 +109,7 @@ send_cmd <- function(con, cmd) {
   return(list(con = con, resp = resp))
 }
 
-## copied from serial::flush.serialConnection, as that function is not
+## copied from serial:::flush.serialConnection, as that function is not
 ## exported
 flush <- function(con) {
   if (!serial::isOpen(con))
@@ -117,5 +117,18 @@ flush <- function(con) {
   tryCatch({
     tcltk::.Tcl(paste("flush ${sdev_", con$var, "}", sep = ""))
   }, error = function(e) stop(simpleError(e$message)))
+  invisible("DONE")
+}
+
+## copied from serial:::close.serialConnection, as that function is not
+## exported
+close <- function (con, ...) {
+  if (serial::isOpen(con)) {
+    tryCatch({
+       tcltk::.Tcl(paste("flush ${sdev_", con$var, "}", sep = ""))
+       tcltk::.Tcl(paste("close ${sdev_", con$var, "}", sep = ""))
+    }, error = function(e) stop(simpleError(e$message)))
+     tcltk::.Tcl(paste("unset sdev_", con$var, sep = ""))
+  }
   invisible("DONE")
 }
