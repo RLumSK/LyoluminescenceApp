@@ -46,12 +46,12 @@ send_cmd <- function(con, cmd) {
   }
 
   ## the set/reset and stop commands produce a 2-bytes response, but the
-  ## others receive a 4-byte stream directly
+  ## start commands receive a 4-byte stream directly
   expects_response <- cmd_char %in% c("P", "R", "D", CR)
 
   ## translate numbers into ASCII characters
   if (length(cmd_num) > 0) {
-    ## TODO ... do better split with > 127
+    ## TODO ... do better split with > 255
     cmd_num <- rawToChar(as.raw(cmd_num), multiple = TRUE)
     cmd_char <- paste0(cmd_char, cmd_num)
   }
@@ -66,9 +66,11 @@ send_cmd <- function(con, cmd) {
 
   ## set connection to ASCII mode
   con$translation <- "cr"
+#  flush(con)
 
   ## write command
   serial::write.serialConnection(con, cmd)
+  flush(con)
 
   ## set connection to binary mode
   con$translation <- "binary"
@@ -83,6 +85,7 @@ send_cmd <- function(con, cmd) {
     ## read response
     resp <- serial::read.serialConnection(con, n = 2) |>
       readBin(what = "character", size = 2, n = 1)
+    flush(con)
 
     ## chose how to report the response
     report <- cli::cli_alert_danger
