@@ -33,44 +33,26 @@ read_count_data <- function(con, freq = 1) {
   ## set results
   res <- numeric()
 
+  con$translation <- "binary"
+
   # read stuff
   while (serial::nBytesInQueue(con)[1] <= 4096 && length(res) <= freq) {
     ## limit the readout speed to the minimum gate time
     Sys.sleep(0.01)
 
     ## read bits
-    com_str <- paste0('binary scan [read ${sdev_', con_str, '}] B* tcl_tmp_', con_str)
+    com_str <- paste0('binary scan [read ${sdev_', con_str, '}] I tcl_tmp_', con_str)
 
     tcltk::tclvalue(tcltk::.Tcl(com_str))
     raw_bits <- tcltk::tclvalue(paste0('tcl_tmp_', con_str))
 
-    ## jump to next cycle if empty
-    if (raw_bits == "") next()
+    int_value <- as.integer(raw_bits)
+    res <- c(res, int_value)
 
-    ## split the bits and create logical values
-    raw_bits <- strsplit(raw_bits, split = "", fixed = TRUE)[[1]] |>
-      as.numeric()
-
-    ## add to buffer if we have more than 0 bit
-    if (length(raw_bits) > 0)
-      buffer <- c(buffer, raw_bits)
-
-    ## evaluate buffer
-    if (length(buffer) >= 32) {
-      ## transform to logical
-      bits <- as.logical(buffer[1:32])
-
-      ## create integer
-      int_value <- sum(2^rev(seq_along(bits) - 1)[bits])
-
-      ## results
-      res <- c(res, int_value)
-
-      ## clear buffer of the used bits
-      buffer <- buffer[-c(1:32)]
-
+    ## debugging
+    if (int_value > 1000) {
+      cat("reading:", raw_bits, ", queue:", serial::nBytesInQueue(con)[1], "\n")
     }
-
   }
 
   ## return list
