@@ -36,25 +36,26 @@ read_count_data <- function(con, freq = 1) {
   con$translation <- "binary"
 
   # read stuff
-  while (length(res) < freq) {
+  while (length(res) <= freq) {
 
-    ## we wait until we have at least 4 bytes in the queue before reading
+    ## we wait until we have at least 8 bytes in the queue before reading
+    ## (in theory for us 4 should suffice, but with 8 we never get spikes)
     ## see https://majenko.co.uk/blog/reading-serial-arduino
-    queue.bytes <- 16
+    queue.bytes <- 8
     queue <- serial::nBytesInQueue(con)[1]
     while (queue < queue.bytes) {
-      Sys.sleep(0.005)
+      Sys.sleep(0.001)
       queue <- serial::nBytesInQueue(con)[1]
     }
 
     ## read bits
     com_str <- paste0('binary scan [read ${sdev_', con_str, '}] I tcl_tmp_', con_str)
 
-    tcltk::tclvalue(tcltk::.Tcl(com_str))
-    raw_bits <- tcltk::tclvalue(paste0('tcl_tmp_', con_str))
-
-    ## jump to next cycle if empty
-    if (raw_bits == "") next()
+    tryCatch(tcl_msg <- tcltk::tclvalue(tcltk::.Tcl(com_str)),
+             error = function(e) stop(simpleError(e$message)))
+    if (tcl_msg == "1")
+      raw_bits <- tcltk::tclvalue(paste0('tcl_tmp_', con_str))
+    else stop("Error while reading from connection, tcl_msg: ", tcl_msg)
 
     ## we may receive a VAVA value at the start, perhaps something from
     ## the send_cmd hasn't removed those responses from the stream
@@ -62,6 +63,14 @@ read_count_data <- function(con, freq = 1) {
     ## if (raw_bits == "01010110010000010101011001000001") { # when using B32
     if (raw_bits == "1447122497") { # when using I
       cat("VAVA\n")
+      next()
+    }
+    if (raw_bits == "1447100416") { # when using I
+      cat("VA  \n")
+      next()
+    }
+    if (raw_bits == "1090519040") { # when using I
+      cat("A   \n")
       next()
     }
 
