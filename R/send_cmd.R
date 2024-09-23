@@ -62,7 +62,7 @@ send_cmd <- function(con, cmd) {
   ## write commands ------------------
   ## flush connection
   con$translation <- "binary"
-  flush(con)
+#  flush(con)
 
   ## set connection to ASCII mode
   con$translation <- "cr"
@@ -70,7 +70,7 @@ send_cmd <- function(con, cmd) {
 
   ## write command
   serial::write.serialConnection(con, cmd)
-  flush(con)
+#  flush(con)
 
   ## set connection to binary mode
   con$translation <- "binary"
@@ -85,7 +85,7 @@ send_cmd <- function(con, cmd) {
     ## read response
     resp <- serial::read.serialConnection(con, n = 2) |>
       readBin(what = "character", size = 2, n = 1)
-    flush(con)
+#    flush(con)
 
     ## chose how to report the response
     report <- cli::cli_alert_danger

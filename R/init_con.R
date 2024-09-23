@@ -43,7 +43,9 @@ init_con <- function(port) {
     serial::write.serialConnection(con, "\n")
 
     ## ensure the queue is empty
-    flush(con)
+    while (serial::nBytesInQueue(con)[1] > 0) {
+      serial::read.serialConnection(con)
+    }
     stopifnot(serial::nBytesInQueue(con)[1] == 0)
   } else {
     cli::cli_alert_info(paste0(text_, " ... already connected!"))

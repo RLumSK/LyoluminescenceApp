@@ -65,13 +65,13 @@ read_count_data <- function(con, freq = 1) {
       next()
     }
 
-    ## debugging
-    if (as.integer(raw_bits) > 1000) {
-      cat("reading:", raw_bits, ", queue:", queue, "\n")
-    }
-
     int_value <- as.integer(raw_bits)
     res <- c(res, int_value)
+
+    ## debugging
+    if (int_value> 1000) {
+      cat("reading:", raw_bits, " bytes in queue:", queue, "\n")
+    }
 
     ## this commented out block is unnecessary when reading data with the `I`
     ## format flag
