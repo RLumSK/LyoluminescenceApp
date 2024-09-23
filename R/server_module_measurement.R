@@ -40,7 +40,7 @@ server_module_measurement <- function(id, user_settings) {
     ## define a few variables
     con_status <- shiny::reactiveValues(
       con = "unknown",
-      mode = "unkown")
+      mode = "unknown")
 
        ## set data file and preset file
        data_file <- tempfile(fileext = ".csv")
