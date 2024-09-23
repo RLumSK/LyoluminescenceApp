@@ -36,7 +36,7 @@ read_count_data <- function(con, freq = 1) {
   con$translation <- "binary"
 
   # read stuff
-  while (length(res) <= freq) {
+  while (length(res) < freq) {
 
     ## we wait until we have at least 8 bytes in the queue before reading
     ## (in theory for us 4 should suffice, but with 8 we never get spikes)
@@ -44,7 +44,7 @@ read_count_data <- function(con, freq = 1) {
     queue.bytes <- 8
     queue <- serial::nBytesInQueue(con)[1]
     while (queue < queue.bytes) {
-      Sys.sleep(0.001)
+      Sys.sleep(0.005)
       queue <- serial::nBytesInQueue(con)[1]
     }
 
@@ -62,15 +62,15 @@ read_count_data <- function(con, freq = 1) {
     ## ##               V       A       V       A
     ## if (raw_bits == "01010110010000010101011001000001") { # when using B32
     if (raw_bits == "1447122497") { # when using I
-      cat("VAVA\n")
+      cat("'VAVA'\n")
       next()
     }
     if (raw_bits == "1447100416") { # when using I
-      cat("VA  \n")
+      cat("'VA  '  -- shouldn't happen!\n")
       next()
     }
     if (raw_bits == "1090519040") { # when using I
-      cat("A   \n")
+      cat("'A   '  -- shouldn't happen!\n")
       next()
     }
 
