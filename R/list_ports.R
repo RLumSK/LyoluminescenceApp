@@ -14,6 +14,6 @@
 #'@md
 #'@export
 list_ports <- function() {
-  suppressMessages(serial::listPorts())
-
+  tryCatch(suppressMessages(serial::listPorts()),
+           error = function(e) "ttyUSB0")
 }
