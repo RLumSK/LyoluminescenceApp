@@ -39,15 +39,14 @@ init_con <- function(port) {
     else
       cli::cli_alert_danger(text_)
 
-    ## communicate with connection ...otherwise it will not work
-    ## the "D" (default PMT), appears to be the safest character
-    serial::write.serialConnection(con, "D")
-    serial::read.serialConnection(con)
-    Sys.sleep(1)
+    ## communicate with connection, otherwise it will not work
+    serial::write.serialConnection(con, "\n")
 
+    ## ensure the queue is empty
+    flush(con)
+    stopifnot(serial::nBytesInQueue(con)[1] == 0)
   } else {
     cli::cli_alert_info(paste0(text_, " ... already connected!"))
-
   }
 
   ## set mode

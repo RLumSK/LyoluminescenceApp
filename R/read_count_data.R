@@ -47,9 +47,6 @@ read_count_data <- function(con, freq = 1) {
       queue <- serial::nBytesInQueue(con)[1]
     }
 
-    if (queue != queue.bytes)
-      print(queue)
-
     ## read bits
     com_str <- paste0('binary scan [read ${sdev_', con_str, '}] I tcl_tmp_', con_str)
 
