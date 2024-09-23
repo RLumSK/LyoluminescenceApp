@@ -35,7 +35,7 @@ read_count_data <- function(con, freq = 1) {
 
   # read stuff
   while (serial::nBytesInQueue(con)[1] <= 4096 && length(res) <= freq) {
-    ## limit the readout speed to the maximum gate time
+    ## limit the readout speed to the minimum gate time
     Sys.sleep(0.01)
 
     ## read bits

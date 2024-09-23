@@ -40,7 +40,7 @@ server_module_measurement <- function(id, user_settings) {
     ## define a few variables
     con_status <- shiny::reactiveValues(
       con = "unknown",
-      mode = "unkown")
+      mode = "unknown")
 
        ## set data file and preset file
        data_file <- tempfile(fileext = ".csv")
@@ -287,7 +287,7 @@ server_module_measurement <- function(id, user_settings) {
   ## show measurement duration
   output$meas_duration <- shiny::renderText({
     if(is.null(input$PMT_nCH) || is.na(input$PMT_nCH) || input$PMT_nCH == 0)
-      "meas. duration: no ristriction"
+      "meas. duration: no restriction"
     else
       paste0("meas. duration: ", input$PMT_nCH * input$PMT_P/100, " s")
 
