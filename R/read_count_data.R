@@ -54,6 +54,16 @@ read_count_data <- function(con, freq = 1) {
     tcltk::tclvalue(tcltk::.Tcl(com_str))
     raw_bits <- tcltk::tclvalue(paste0('tcl_tmp_', con_str))
 
+    ## we may receive a VAVA value at the start if we don't sleep() enough
+    ## when the measurement starts: perhaps some responsed don't get cleared
+    ## from the stream?
+    ## ##               V       A       V       A
+    ## if (raw_bits == "01010110010000010101011001000001") { # when using B32
+    if (raw_bits == "1447122497") { # when using I
+      cat("'VAVA' -- if you see this, perhaps increase the sleep times\n")
+      next()
+    }
+
     int_value <- as.integer(raw_bits)
     res <- c(res, int_value)
 
