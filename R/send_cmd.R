@@ -49,11 +49,14 @@ send_cmd <- function(con, cmd) {
   ## start commands receive a 4-byte stream directly
   expects_response <- cmd_char %in% c("P", "R", "D", CR)
 
+  cmd_report <- cmd_char
+
   ## translate numbers into ASCII characters
   if (length(cmd_num) > 0) {
     ## TODO ... do better split with > 255
-    cmd_num <- rawToChar(as.raw(cmd_num), multiple = TRUE)
-    cmd_char <- paste0(cmd_char, cmd_num)
+    num_raw <- as.raw(cmd_num)
+    cmd_char <- paste0(cmd_char, rawToChar(num_raw, multiple = TRUE))
+    cmd_report<- paste0(cmd_report, as.character(num_raw), " (", cmd_num, ")")
   }
 
   ## construct call
@@ -95,7 +98,8 @@ send_cmd <- function(con, cmd) {
 
     ## make sure that linebreaks are shown
     cmd <- gsub('\n', '\\n', cmd, fixed = TRUE)
-    report(paste0("sent: <", as.character(cmd), "> | received: '", resp, "'"),
+    cmd_report <- gsub('\n', '\\n', cmd_report, fixed = TRUE)
+    report(paste0("sent: <", cmd_report, "> | received: '", resp, "'"),
            wrap = TRUE)
   }
 
