@@ -49,7 +49,7 @@ ui_module_measurement <- function(id) {
                   shiny::br(),
                   shiny::actionButton(
                    inputId = ns("init_start"),
-                   label = shiny::HTML("Initialse")),
+                   label = shiny::HTML("Initialise")),
                   shiny::actionButton(
                    inputId = ns("init_stop"),
                    label = shiny::HTML("Disconnect")))),
