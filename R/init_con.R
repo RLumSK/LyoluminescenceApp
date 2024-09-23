@@ -24,9 +24,7 @@ init_con <- function(port) {
     newline = 1,
     buffering = 'none',
     translation = "cr",
-    handshake = "none",
-    buffersize = 65536,
-)
+    handshake = "none")
 
   ## check text
   text_ <- paste0("Connecting to ", con$port)
