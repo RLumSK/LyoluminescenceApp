@@ -61,7 +61,8 @@ send_cmd <- function(con, cmd) {
     ## represent non-printable characters (as those that may occur when using
     ## the P command) both as the decimal value chosen by the user and as its
     ## corresponding raw (hexadecimal) value
-    cmd_report<- paste0(cmd_report, cmd_num, " (", as.character(num_raw), ")")
+    cmd_report <- paste0(cmd_report, cmd_num,
+                         " (0x", as.character(num_raw), ")")
   }
 
   ## construct call
