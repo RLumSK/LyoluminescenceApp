@@ -3,6 +3,20 @@
 A simple graphical user interface to control an Hamamatsu Hamamatsu H9319-11 PMT 
 for lyoluminescence measurements. 
 
+
+## Usage
+
+``` r
+# Load the package
+library(LyoluminescenceApp)
+
+# Run the app
+run_app()
+```
+
+![](man/figures/README_Screenshot1.png)
+
+
 # Licence
 
 This program is free software: you can redistribute it and/or modify it under the terms of the [GNU General Public License as published by the Free Software Foundation, either version 3](https://github.com/RLumSK/LyoluminescenceApp/blob/main/LICENCE) of the License, or any later version.
