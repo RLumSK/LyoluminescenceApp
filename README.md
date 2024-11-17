@@ -1,6 +1,6 @@
 # Lyoluminescence Shiny App
 
-A simple graphical user interface to control an Hamamatsu Hamamatsu H9319-11 PMT 
+A simple graphical user interface to control an Hamamatsu H9319-11 PMT 
 for lyoluminescence measurements. 
 
 
