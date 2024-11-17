@@ -27,22 +27,42 @@ send_cmd <- function(con, cmd) {
   cmd_char <- regmatches(x = cmd, regexec("[A-Z]", text = cmd))[[1]]
   cmd_num <- regmatches(x = cmd, regexec("[0-9]+", text = cmd))[[1]]
 
+  ## the newline character (what Hamamatsu calls carriage return) is used
+  ## to stop a continous reading
+  CR <- "\n"
+  if (length(cmd_char) == 0 && cmd == CR)
+    cmd_char <- CR
+
   ## check allowed commands
-  if (!cmd_char %in% c("P", "R", "D", "S", "C")) {
+  if (!cmd_char %in% c("P", "R", "D", "S", "C", CR)) {
     stop("[send_cmd()] Unsupported command! Supported are:
          P\t->\t set the integration interval in 10 ms increments (1 to 100)
          R\t->\t set sequence of readings (1 to 255)
          D\t->\t reset HV to default
          S\t->\t start reading sequence
-         C\t->\t start/stop continous reading
+         C\t->\t start continuous reading
+         ", deparse(CR), "\t->\t stop continuous reading
          ", call. = FALSE)
   }
 
+  ## the set/reset and stop commands produce a 2-bytes response, but the
+  ## start commands receive a 4-byte stream directly
+  expects_response <- cmd_char %in% c("P", "R", "D", CR)
+
+  ## cmd_report is used to build the message to be printed to the user
+  cmd_report <- cmd_char
+
   ## translate numbers into ASCII characters
   if (length(cmd_num) > 0) {
-    ## TODO ... do better split with > 127
-    cmd_num <- rawToChar(as.raw(cmd_num), multiple = TRUE)
-    cmd_char <- paste0(cmd_char, cmd_num)
+    ## TODO ... do better split with > 255
+    num_raw <- as.raw(cmd_num)
+    cmd_char <- paste0(cmd_char, rawToChar(num_raw, multiple = TRUE))
+
+    ## represent non-printable characters (as those that may occur when using
+    ## the P command) both as the decimal value chosen by the user and as its
+    ## corresponding raw (hexadecimal) value
+    cmd_report <- paste0(cmd_report, cmd_num,
+                         " (0x", as.character(num_raw), ")")
   }
 
   ## construct call
@@ -63,22 +83,27 @@ send_cmd <- function(con, cmd) {
   con$translation <- "binary"
 
   ## read response ... we let the system wait until we have something
-  while(serial::nBytesInQueue(con)[1] < 2)
-    Sys.sleep(0.01)
+  resp <- NA
+  if (expects_response) {
+    while(serial::nBytesInQueue(con)[1] < 2) {
+      Sys.sleep(0.01)
+    }
 
-  ## read response
-  resp <- serial::read.serialConnection(con, n = 2) |>
-    readBin(what = "character", size = 2, n = 1)
+    ## read response
+    resp <- serial::read.serialConnection(con, n = 2) |>
+      readBin(what = "character", size = 2, n = 1)
 
-  ## make sure that linebreaks are shown cmd
-  cmd <- gsub('\n', '\\n', cmd, fixed = TRUE)
+    ## chose how to report the response
+    report <- cli::cli_alert_danger
+    if (resp == "VA" || (cmd == CR && resp == "")) {
+      report <- cli::cli_alert_success
+    }
 
-  if (resp == "VA" || (cmd == "C" && resp == "")) {
-    cli::cli_alert_success(paste0("sent: <", as.character(cmd), "> | received: ", resp), wrap = TRUE)
-
-  } else {
-    cli::cli_alert_danger(paste0("sent: <", as.character(cmd), "> | received: ", resp), wrap = TRUE)
-
+    ## make sure that linebreaks are shown
+    cmd <- gsub('\n', '\\n', cmd, fixed = TRUE)
+    cmd_report <- gsub('\n', '\\n', cmd_report, fixed = TRUE)
+    report(paste0("sent: <", cmd_report, "> | received: '", resp, "'"),
+           wrap = TRUE)
   }
 
   ## set mode

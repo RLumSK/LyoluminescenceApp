@@ -40,7 +40,7 @@ server_module_measurement <- function(id, user_settings) {
     ## define a few variables
     con_status <- shiny::reactiveValues(
       con = "unknown",
-      mode = "unkown")
+      mode = "unknown")
 
        ## set data file and preset file
        data_file <- tempfile(fileext = ".csv")
@@ -210,13 +210,10 @@ server_module_measurement <- function(id, user_settings) {
       promises::future_promise({
         ## init connections and start reading
         con <- init_con(port)
-        Sys.sleep(0.5)
+        Sys.sleep(0.25)
 
-        ## check status of reading, to make sure the PMT is not in
-        ## continuous reading mode
-        ## if we do not get VA we have to stop the mode first
-        if (send_cmd(con = con, cmd = "C")$resp != "VA")
-          send_cmd(con = con, cmd = "C")
+        ## make sure the PMT is not in continuous reading mode
+        send_cmd(con = con, cmd = "\n")
 
         send_cmd(con = con, cmd = "D")
         send_cmd(con = con, cmd = paste0("P", PMT_P))
@@ -224,8 +221,8 @@ server_module_measurement <- function(id, user_settings) {
 
         while (cnt <= PMT_nCH) {
           if (interrupted()) {
-            send_cmd(con = con, cmd = "C")
-            Sys.sleep(1)
+            send_cmd(con = con, cmd = "\n")
+            Sys.sleep(0.1)
             break()
           }
 
@@ -287,7 +284,7 @@ server_module_measurement <- function(id, user_settings) {
   ## show measurement duration
   output$meas_duration <- shiny::renderText({
     if(is.null(input$PMT_nCH) || is.na(input$PMT_nCH) || input$PMT_nCH == 0)
-      "meas. duration: no ristriction"
+      "meas. duration: no restriction"
     else
       paste0("meas. duration: ", input$PMT_nCH * input$PMT_P/100, " s")
 
