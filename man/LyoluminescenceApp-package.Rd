@@ -2,12 +2,25 @@
 % Please edit documentation in R/LyoluminescenceApp-package.R
 \docType{package}
 \name{LyoluminescenceApp-package}
+\alias{LyoluminescenceApp}
 \alias{LyoluminescenceApp-package}
-\title{LyoluminescenceApp\cr}
+\title{LyoluminescenceApp}
 \description{
-TODO
+Simple graphical user interface to measure lyoluminescence
+with an Hamamatsu PMT.
 }
 \details{
-TODO more content to add
+This application interfaces an Hamamatsu H9319-11 connected
+via  RS-232 interface and enables recording signals. Particularly, for
+lyoluminescence measurements.
+}
+\author{
+\strong{Maintainer}: Sebastian Kreutzer \email{sebastian.kreutzer@uni-heidelberg.de} (\href{https://orcid.org/0000-0002-0734-2199}{ORCID})
+
+Authors:
+\itemize{
+  \item Marco Colombo (\href{https://orcid.org/0000-0001-6672-0623}{ORCID})
+}
+
 }
 \keyword{package}

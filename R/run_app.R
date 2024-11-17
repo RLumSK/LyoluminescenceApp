@@ -2,7 +2,6 @@
 #'
 #' @description Controls the shiny app start
 #'
-#'
 #' @param browser [logical] (*with default*): enable/disable app start in browser
 #'
 #' @param display [character] (*with default*): set display mode of the app [shiny::runApp]
@@ -12,7 +11,7 @@
 #' run_app()
 #' }
 #'
-#' @return A [shiny-package] application object.
+#' @return A [shiny::shiny-package] application object.
 #'
 #' @family shiny
 #'

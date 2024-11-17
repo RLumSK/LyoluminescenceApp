@@ -19,7 +19,10 @@ ui_module_static_news <- function(id) {
       shiny::column(
         width = 10,
         offset = 1,
-       shiny::uiOutput(outputId = ns('news')))),
+       shiny::uiOutput(outputId = ns('news'))),
+       shiny::includeMarkdown("static/news.md")
+      ),
+    
     icon = shiny::icon("list-alt", lib = "glyphicon")
   )# end news
 

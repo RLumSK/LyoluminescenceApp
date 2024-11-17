@@ -12,7 +12,7 @@ run_app(browser = TRUE, display = "auto")
 \item{display}{\link{character} (\emph{with default}): set display mode of the app \link[shiny:runApp]{shiny::runApp}}
 }
 \value{
-A \link{shiny-package} application object.
+A \link[shiny:shiny-package]{shiny::shiny-package} application object.
 }
 \description{
 Controls the shiny app start

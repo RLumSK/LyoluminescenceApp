@@ -18,6 +18,7 @@ Server module static pages
 Other modules: 
 \code{\link{server_module_measurement}()},
 \code{\link{ui_module_measurement}()},
+\code{\link{ui_module_static_about}()},
 \code{\link{ui_module_static_news}()}
 }
 \concept{modules}
