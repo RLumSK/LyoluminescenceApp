@@ -1,5 +1,9 @@
 # Lyoluminescence Shiny App
 
+[![Project Status: Active](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14176467.svg)](https://doi.org/10.5281/zenodo.14176467)
+
+
 A simple graphical user interface to control an Hamamatsu H9319-11 PMT 
 for lyoluminescence measurements. 
 
@@ -27,6 +31,6 @@ This program is distributed in the hope that it will be useful, but WITHOUT ANY 
 
 * Sebastian Kreutzer received funding through the DFG Heisenberg programme ([#505822867](https://gepris.dfg.de/gepris/projekt/505822867))
 
-* Marco Colombo is supported through the DFG Programme REPLAY [#505822867](https://gepris.dfg.de/gepris/projekt/528704761)
+* Marco Colombo is supported through the DFG Programme REPLAY ([#505822867](https://gepris.dfg.de/gepris/projekt/528704761))
 
 * The development of this app was supported by the European Union’s Horizon Europe research and innovation programme under the Marie Skłodowska-Curie grant agreement No [101107989 (Lyoluminescence)](https://cordis.europa.eu/project/id/101107989).
