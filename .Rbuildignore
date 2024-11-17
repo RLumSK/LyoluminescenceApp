@@ -5,3 +5,4 @@
 
 LICENCE
 ^\.zenodo\.json$
+^\.CITATION.cff$
