@@ -11,4 +11,5 @@ title: "LyoluminescenceApp"
 version: 0.1.0
 doi: 10.5281/zenodo.1234
 date-released: 2024-11-17
+license: "GPL-3"
 url: "https://github.com/RLumSK/LyoluminescenceApp"
