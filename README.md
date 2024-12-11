@@ -8,6 +8,22 @@ A simple graphical user interface to control an Hamamatsu H9319-11 PMT
 for lyoluminescence measurements. 
 
 
+## Installation
+
+At the moment the package is not on CRAN. An easy way to install it on your
+system is via the `devtools` package:
+
+```r
+install.packages("devtools")
+devtools::install_github("RLumSK/LyoluminescenceApp")
+```
+
+This operation needs to be done just once. Note that in both steps you will
+be asked to install any required package you may not yet have on your system.
+Just agree when prompted and be patient while all dependencies are downloaded
+and installed.
+
+
 ## Usage
 
 ``` r
