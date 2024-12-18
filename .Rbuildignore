@@ -3,6 +3,6 @@
 
 ^\.DS_STORE$ 
 
-LICENCE
+LICENSE
 ^\.zenodo\.json$
-^\.CITATION.cff$
+CITATION.cff

@@ -22,5 +22,10 @@ Authors:
   \item Marco Colombo (\href{https://orcid.org/0000-0001-6672-0623}{ORCID})
 }
 
+Other contributors:
+\itemize{
+  \item Magdalena Biernacka (\href{https://orcid.org/0000-0001-6283-0550}{ORCID}) [contributor]
+}
+
 }
 \keyword{package}

@@ -7,6 +7,9 @@ authors:
 - family-names: "Colombo"
   given-names: "Marco"
   orcid: "https://orcid.org/0000-0001-6672-0623"
+- family-names: "Biernacka"
+  given-names: "Magdalena"
+  orcid: "https://orcid.org/0000-0001-6283-0550"
 title: "LyoluminescenceApp"
 version: 0.1.0
 doi: 10.5281/zenodo.1234

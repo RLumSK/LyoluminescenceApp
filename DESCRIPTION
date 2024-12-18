@@ -1,10 +1,11 @@
 Package: LyoluminescenceApp
 Type: Package
 Title: Lyoluminescence Measurement Shiny App
-Version: 0.1.0
+Version: 0.1.0.9000
 Authors@R: c(
     person("Sebastian", "Kreutzer", role = c("aut","cre"), email = "sebastian.kreutzer@uni-heidelberg.de", comment = c(ORCID = "0000-0002-0734-2199")),
-    person("Marco", "Colombo", role = c("aut"), comment = c(ORCID = "0000-0001-6672-0623")))
+    person("Marco", "Colombo", role = c("aut"), comment = c(ORCID = "0000-0001-6672-0623")),
+    person("Magdalena", "Biernacka", role = c("ctb"), comment = c(ORCID = "0000-0001-6283-0550")))
 Maintainer: Sebastian Kreutzer <sebastian.kreutzer@uni-heidelberg.de>
 Description: Shiny App to control an Hamamatsu PMT to measure lyoluminescence signals.
 License: GPL-3
